@@ -11,22 +11,25 @@ campaign_cats = ["Clutch Bags","Wallets", "Accessories"]
 campaign_cats = [i.upper() for i in campaign_cats]
 
 def any_matches(a,b):
-    if len([a for a in a if a in b]) >= 1:
+    if len([i for i in a if i in b]) >= 1:
         return(True)
     return(False)
     
 def handle_user_events(event, lead, traveler, connected_record, resources):
-  traveler.VarB = str(event.categories_list)
+    traveler.VarB = str(event.categories_list)
+    traveler.VarG = str(event.subcategories_list)
     
     
 def handle_lead(event, lead, traveler, connected_record, resources):
     myCats = connected_record.get_entities('Google BigQuery', 'UserEvents')[0].categories_list
     mySubCats = connected_record.get_entities('Google BigQuery', 'UserEvents')[0].subcategories_list
-    allCats = myCats+mySubCats
+    allCats = myCats+", "+mySubCats
+    allCats = allCats.upper()
+    
     if allCats is None:
         return
-    if any_matches([i.upper() for i in allCats.split(",")],campaign_cats):
-      traveler.VarB = True
+    if any_matches(campaign_cats,allCats):
+        traveler.VarB = True
         
 
 handler1 = NamedHandler(handle_user_events, 'handle_user_events')
@@ -37,8 +40,3 @@ advanced_rule_registry.register(trigger1, handler1)
 handler2 = NamedHandler(handle_lead, 'handle_lead')
 trigger2 = OnChangeToFieldTrigger('Google BigQuery', 'dim_user', 'Id')
 advanced_rule_registry.register(trigger2, handler2)
-
-
-
-
-
