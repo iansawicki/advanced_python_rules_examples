@@ -28,15 +28,12 @@ def handle_lead(event, lead, traveler, connected_record, resources):
     
     if allCats is None:
         return
-    if any_matches(campaign_cats,allCats):
-        traveler.VarB = True
+    traveler.VarB = any_matches(campaign_cats,allCats)
         
-
 handler1 = NamedHandler(handle_user_events, 'handle_user_events')
 trigger1 = OnChangeToFieldTrigger('Google BigQuery', 'UserEvents', 'Id')
 advanced_rule_registry.register(trigger1, handler1)
 
-  
 handler2 = NamedHandler(handle_lead, 'handle_lead')
 trigger2 = OnChangeToFieldTrigger('Google BigQuery', 'dim_user', 'Id')
 advanced_rule_registry.register(trigger2, handler2)
