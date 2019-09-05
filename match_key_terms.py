@@ -12,8 +12,8 @@ campaign_cats = [i.upper() for i in campaign_cats]
 
 def any_matches(a,b):
     if len([i for i in a if i in b]) >= 1:
-        return(True)
-    return(False)
+        return("TRUE")
+    return("FALSE")
 
 def handle_user_events(event, lead, traveler, connected_record, resources):
     traveler.VarB = str(event.categories_list)
@@ -43,3 +43,4 @@ advanced_rule_registry.register(trigger1, handler1)
 handler2 = NamedHandler(handle_lead, 'handle_lead')
 trigger2 = OnChangeToFieldTrigger('Google BigQuery', 'dim_user', 'Id')
 advanced_rule_registry.register(trigger2, handler2)
+
