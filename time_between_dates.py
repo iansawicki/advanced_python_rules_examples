@@ -2,13 +2,15 @@
 Comment here 
 """ 
 ###Functional code begins here - edit at your own peril!
-now = datetime.datetime.now()
+from datetime import datetime
+
+now = datetime.now()
 def days_since_now(a_datetime):
     days_since = now - a_datetime
     return(days_since.days)
 
 def split_order_dates(datestring):
-    all_dates = sorted([datetime.datetime.strptime(x,"%Y-%m-%d") for x in datestring.split(",")])
+    all_dates = sorted([datetime.strptime(x,"%Y-%m-%d") for x in datestring.split(",")])
     return(all_dates)
 
 
@@ -24,8 +26,8 @@ def handle_order_history(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)] # Calculates number of days between now and each datetime in this list
     
-    if len([x for x in all_days_since if x > 365 and x < 730]) >=1:
-        traveler.VarH = True
+    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1
+    
         
         
 def handle_user_event(event, lead, traveler, connected_record, resources):
@@ -40,8 +42,7 @@ def handle_user_event(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)] # Calculates number of days between now and each datetime in this list
     
-    if len([x for x in all_days_since if x > 365 and x < 730]) >=1:
-        traveler.VarH = True
+    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1
 
     
 def handle_lead(event, lead, traveler, connected_record, resources):
@@ -56,9 +57,7 @@ def handle_lead(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)]
     
-    if len ([x for x in all_days_since if x > 365 and x < 730]) >=1:
-        traveler.VarH = True
-    
+    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1    
     
     
 ###Event handlers        
