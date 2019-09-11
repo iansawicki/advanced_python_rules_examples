@@ -26,7 +26,7 @@ def handle_order_history(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)] # Calculates number of days between now and each datetime in this list
     
-    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1
+    traveler.VarH = str(len([x for x in all_days_since if x > 365 and x <= 730]) >=1)
     
         
         
@@ -42,7 +42,7 @@ def handle_user_event(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)] # Calculates number of days between now and each datetime in this list
     
-    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1
+    traveler.VarH = str(len([x for x in all_days_since if x > 365 and x < 730]) >=1)
 
     
 def handle_lead(event, lead, traveler, connected_record, resources):
@@ -57,7 +57,7 @@ def handle_lead(event, lead, traveler, connected_record, resources):
 
     all_days_since = [days_since_now(d) for d in split_order_dates(all_order_dates)]
     
-    traveler.VarH = len([x for x in all_days_since if x > 365 and x < 730]) >=1    
+    traveler.VarH = str(len([x for x in all_days_since if x > 365 and x < 730]) >=1)    
     
     
 ###Event handlers        
