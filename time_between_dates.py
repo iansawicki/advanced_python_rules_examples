@@ -10,3 +10,4 @@ def split_order_dates(datestring):
 all_days_since = [days_since_now(d) for d in split_order_dates(orders_string)]
 
 if len ([x for x in all_days_since if x > 365 and x < 730]) > =1:
+  true
