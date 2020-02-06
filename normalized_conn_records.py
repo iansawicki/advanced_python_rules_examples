@@ -8,7 +8,7 @@ ents = {"buynowtrunc": ["max_solddatetime"],
         "prebidtrunc": ["max_buyerprebidauctiondatetime"],
         "timedauctiontrunc": ["max_timedauctionstartdatetime"]}
 
-#    "timedauctiontrunc": ["max_timedauctionstartdatetime"
+time_fields = ["buynowtrunc_max_solddatetime","liveacutiontrunc_max_date","prebidtrunc_max_buyerprebidauctiondatetime","timedauctiontrunc_max_timedauctionstartdatetime"]
 
 conn = 'Amazon S3: Import'
 
@@ -24,10 +24,10 @@ def normalize_mapped_ents(
         connected_record,
         ents=ents,
         conn=conn):
-    if traveler.VarD is None:
+    if traveler.VarDataStorage is None:
         norm_dict = {}
     else:
-        norm_dict = json.loads(traveler.VarD)
+        norm_dict = json.loads(traveler.VarDataStorage)
     for k, v in ents.items():
         traveler.VarR = str("Trying to get entities.")
         conn_record = connected_record.get_entities(conn, k)
@@ -38,7 +38,7 @@ def normalize_mapped_ents(
             for i in v:
                 traveler.VarR = str(getattr(conn_record[0], i))
                 norm_dict[k + "_" + i] = getattr(conn_record[0], i)
-                traveler.VarD = json.dumps(norm_dict)
+                traveler.VarDataStorage = json.dumps(norm_dict)
     return
         
 def handle_event(
@@ -49,7 +49,12 @@ def handle_event(
     resources,
     ):
     traveler.VarR = str("Initialized")
-    return(normalize_mapped_ents(traveler,connected_record))
+    normalize_mapped_ents(traveler,connected_record)
+    time_vals = [v for k,v in json.loads(traveler.VarDataStorage).items() if k in time_fields]
+    traveler.VarR = str("The length of time_vals is {}".format(len(time_vals)))
+    if len(time_vals) > 0:
+        traveler.VarM = str(most_recent_time(time_vals))
+    
 
 
 handler = NamedHandler(
