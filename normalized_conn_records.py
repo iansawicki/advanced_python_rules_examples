@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
+from datetime import datetime
 
 
 ents = {"buynowtrunc": ["max_solddatetime"],
@@ -15,8 +16,9 @@ conn = 'Amazon S3: Import'
 norm_dict = {}
 
 
-def most_recent_time(dt_list):
-    return(max(dt_list))
+def most_recent_time(dates):
+    return(max(dates, key=lambda d: datetime.strptime(d, '%Y-%m-%d')))
+
 
 
 def normalize_mapped_ents(
@@ -51,6 +53,7 @@ def handle_event(
     traveler.VarR = str("Initialized")
     normalize_mapped_ents(traveler,connected_record)
     time_vals = [v for k,v in json.loads(traveler.VarDataStorage).items() if k in time_fields]
+    time_vals = [tv for tv in time_vals if tv!=None]
     traveler.VarR = str("The length of time_vals is {}".format(len(time_vals)))
     if len(time_vals) > 0:
         traveler.VarM = str(most_recent_time(time_vals))
